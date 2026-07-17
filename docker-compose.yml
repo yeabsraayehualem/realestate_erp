@@ -1,0 +1,35 @@
+services:
+  odoo:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    container_name: realestate-odoo
+    environment:
+      HOST: postgres
+      USER: odoo
+      PASSWORD: odoo
+    ports:
+      - "8900:8069"
+      - "8072:8072"
+    volumes:
+      - ./odoo_data:/var/lib/odoo
+      # - ./log:/var/log/odoo
+    restart: always
+   
+  postgres:
+    image: postgres:17
+    container_name: realestate_postgres
+    environment:
+      - POSTGRES_USER=odoo
+      - POSTGRES_PASSWORD=odoo
+    ports:
+      - "12532:5432"
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+  
+volumes:
+  postgres_data:
+  odoo_data:
+
